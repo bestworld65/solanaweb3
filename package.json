@@ -1,10 +1,12 @@
 {
   "dependencies": {
     "@metaplex-foundation/mpl-token-metadata": "^2.13.0",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.2.0",
+    "@metaplex-foundation/umi-uploader-irys": "^1.2.0",
     "@solana-developers/helpers": "^2.8.1",
     "@solana/wallet-adapter-react": "^0.15.36",
     "@solana/wallet-adapter-react-ui": "^0.9.36",
-    "@solana/web3.js": "^1.98.0",
+    "@solana/web3.js": "^1.98.1",
     "esrun": "^3.2.26",
     "react": "^19.1.0",
     "typescript": "^5.7.3"
