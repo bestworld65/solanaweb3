@@ -34,3 +34,36 @@ await airdropIfRequired(
 );
 
 console.log("Loaded user:", user.publicKey.toBase58());
+
+const umi = createUmi(connection);
+
+// load keypair from local file system
+// See https://github.com/solana-developers/helpers?tab=readme-ov-file#get-a-keypair-from-a-keypair-file
+const user = await getKeypairFromFile();
+
+// convert to umi compatible keypair
+const umiKeypair = umi.eddsa.createKeypairFromSecretKey(user.secretKey);
+
+// assigns a signer to our umi instance, and loads the MPL metadata program and Irys uploader plugins.
+umi
+  .use(keypairIdentity(umiKeypair))
+  .use(mplTokenMetadata())
+  .use(irysUploader());
+
+  const collectionImagePath = path.resolve(__dirname, "collection.png");
+
+const buffer = await fs.readFile(collectionImagePath);
+let file = createGenericFile(buffer, collectionImagePath, {
+  contentType: "image/png",
+});
+const [image] = await umi.uploader.upload([file]);
+console.log("image uri:", image);
+
+// upload offchain json to Arweave using irys
+const uri = await umi.uploader.uploadJson({
+  name: "My Collection",
+  symbol: "MC",
+  description: "My Collection description",
+  image,
+});
+console.log("Collection offchain metadata URI:", uri);
