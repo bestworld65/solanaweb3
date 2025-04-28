@@ -67,3 +67,25 @@ const uri = await umi.uploader.uploadJson({
   image,
 });
 console.log("Collection offchain metadata URI:", uri);
+
+// generate mint keypair
+const collectionMint = generateSigner(umi);
+
+// create and mint NFT
+await createNft(umi, {
+  mint: collectionMint,
+  name: "My Collection",
+  uri,
+  updateAuthority: umi.identity.publicKey,
+  sellerFeeBasisPoints: percentAmount(0),
+  isCollection: true,
+}).sendAndConfirm(umi, { send: { commitment: "finalized" } });
+
+let explorerLink = getExplorerLink(
+  "address",
+  collectionMint.publicKey,
+  "devnet",
+);
+console.log(`Collection NFT:  ${explorerLink}`);
+console.log(`Collection NFT address is:`, collectionMint.publicKey);
+console.log("✅ Finished successfully!");
