@@ -58,3 +58,23 @@ const nftData = {
   sellerFeeBasisPoints: 0,
   imageFile: "nft.png",
 };
+
+const NFTImagePath = path.resolve(__dirname, "nft.png");
+
+const buffer = await fs.readFile(NFTImagePath);
+let file = createGenericFile(buffer, NFTImagePath, {
+  contentType: "image/png",
+});
+
+// upload image and get image uri
+const [image] = await umi.uploader.upload([file]);
+console.log("image uri:", image);
+
+// upload offchain json using irys and get metadata uri
+const uri = await umi.uploader.uploadJson({
+  name: "My NFT",
+  symbol: "MN",
+  description: "My NFT Description",
+  image,
+});
+console.log("NFT offchain metadata URI:", uri);
