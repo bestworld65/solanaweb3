@@ -46,3 +46,15 @@ import {
     .use(keypairIdentity(umiKeypair))
     .use(mplTokenMetadata())
     .use(irysUploader());
+
+    // Substitute in your collection NFT address from create-metaplex-nft-collection.ts
+const collectionNftAddress = UMIPublicKey("YOUR_COLLECTION_NFT_ADDRESS_HERE");
+
+// example data and metadata for our NFT
+const nftData = {
+  name: "My NFT",
+  symbol: "MN",
+  description: "My NFT Description",
+  sellerFeeBasisPoints: 0,
+  imageFile: "nft.png",
+};
