@@ -78,3 +78,23 @@ const uri = await umi.uploader.uploadJson({
   image,
 });
 console.log("NFT offchain metadata URI:", uri);
+
+// generate mint keypair
+const mint = generateSigner(umi);
+
+// create and mint NFT
+await createNft(umi, {
+  mint,
+  name: "My NFT",
+  symbol: "MN",
+  uri,
+  updateAuthority: umi.identity.publicKey,
+  sellerFeeBasisPoints: percentAmount(0),
+  collection: {
+    key: collectionAddress,
+    verified: false,
+  },
+}).sendAndConfirm(umi, { send: { commitment: "finalized" } });
+
+let explorerLink = getExplorerLink("address", mint.publicKey, "devnet");
+console.log(`Token Mint:  ${explorerLink}`);
