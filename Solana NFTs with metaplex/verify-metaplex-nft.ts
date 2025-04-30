@@ -38,3 +38,16 @@ import {
   
   // Substitute in your NFT address from create-metaplex-nft.ts
   const nftAddress = UMIPublicKey("");
+
+  // Verify our collection as a Certified Collection
+// See https://developers.metaplex.com/token-metadata/collections
+const metadata = findMetadataPda(umi, { mint: nftAddress });
+await verifyCollectionV1(umi, {
+  metadata,
+  collectionMint: collectionAddress,
+  authority: umi.identity,
+}).sendAndConfirm(umi);
+
+let explorerLink = getExplorerLink("address", nftAddress, "devnet");
+console.log(`verified collection:  ${explorerLink}`);
+console.log("✅ Finished successfully!");
