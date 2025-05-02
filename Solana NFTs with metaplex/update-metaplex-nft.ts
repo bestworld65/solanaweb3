@@ -48,3 +48,16 @@ import {
     .use(keypairIdentity(umiKeypair))
     .use(mplTokenMetadata())
     .use(irysUploader());
+
+    // Load the NFT using the mint address
+const mint = UMIPublicKey("YOUR_NFT_ADDRESS_HERE");
+const asset = await fetchDigitalAsset(umi, mint);
+
+// example data for updating an existing NFT
+const updatedNftData = {
+  name: "Updated Asset",
+  symbol: "UPDATED",
+  description: "Updated Description",
+  sellerFeeBasisPoints: 0,
+  imageFile: "nft.png",
+};
