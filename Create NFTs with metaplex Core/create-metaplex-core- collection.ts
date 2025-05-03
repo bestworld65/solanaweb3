@@ -33,3 +33,12 @@ await airdropIfRequired(
 );
 
 console.log("Loaded user:", user.publicKey.toBase58());
+
+// create a new connection to Solana's devnet cluster
+const umi = createUmi(connection).use(mplCore()).use(irysUploader());
+
+// convert to umi compatible keypair
+const umiKeypair = umi.eddsa.createKeypairFromSecretKey(user.secretKey);
+
+// assigns a signer to our umi instance, and loads the MPL metadata program and Irys uploader plugins.
+umi.use(keypairIdentity(umiKeypair));
