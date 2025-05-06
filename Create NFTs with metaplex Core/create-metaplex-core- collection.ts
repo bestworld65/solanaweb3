@@ -42,3 +42,32 @@ const umiKeypair = umi.eddsa.createKeypairFromSecretKey(user.secretKey);
 
 // assigns a signer to our umi instance, and loads the MPL metadata program and Irys uploader plugins.
 umi.use(keypairIdentity(umiKeypair));
+
+const collectionImagePath = "collection.png";
+
+const buffer = await fs.readFile(collectionImagePath);
+let file = createGenericFile(buffer, collectionImagePath, {
+  contentType: "image/png",
+});
+const [image] = await umi.uploader.upload([file]);
+console.log("image uri:", image);
+
+const metadata = {
+  name: "My Collection",
+  description: "My Collection description",
+  image,
+  external_url: "https://example.com",
+  properties: {
+    files: [
+      {
+        uri: image,
+        type: "image/jpeg",
+      },
+    ],
+    category: "image",
+  },
+};
+
+// upload offchain json to Arweave using irys
+const uri = await umi.uploader.uploadJson(metadata);
+console.log("Collection offchain metadata URI:", uri);
