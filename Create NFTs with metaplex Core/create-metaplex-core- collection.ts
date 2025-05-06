@@ -71,3 +71,18 @@ const metadata = {
 // upload offchain json to Arweave using irys
 const uri = await umi.uploader.uploadJson(metadata);
 console.log("Collection offchain metadata URI:", uri);
+
+// generate mint keypair
+const collection = generateSigner(umi);
+
+// create and mint a Collection
+await createCollection(umi, {
+  collection,
+  name: "My Collection",
+  uri,
+}).sendAndConfirm(umi, { send: { commitment: "finalized" } });
+
+let explorerLink = getExplorerLink("address", collection.publicKey, "devnet");
+console.log(`Collection: ${explorerLink}`);
+console.log(`Collection address is:  ${collection.publicKey}`);
+console.log("✅ Finished successfully!");
