@@ -83,3 +83,22 @@ const metadata = {
 // upload offchain json using irys and get metadata uri
 const uri = await umi.uploader.uploadJson(metadata);
 console.log("Asset offchain metadata URI:", uri);
+
+// Substitute in your collection NFT address from create-metaplex-nft-collection.ts
+const collection = await fetchCollection(
+    umi,
+    UMIPublicKey("YOUR_COLLECTION_ADDRESS_HERE"),
+  );
+  const asset = generateSigner(umi);
+  
+  // create and mint NFT
+  await create(umi, {
+    asset,
+    collection,
+    name: "My Asset",
+    uri,
+  }).sendAndConfirm(umi, { send: { commitment: "finalized" } });
+  
+  let explorerLink = getExplorerLink("address", asset.publicKey, "devnet");
+  console.log(`Asset: ${explorerLink}`);
+  console.log(`Asset address: ${asset.publicKey}`);
