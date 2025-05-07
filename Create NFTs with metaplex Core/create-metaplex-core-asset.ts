@@ -42,3 +42,44 @@ import {
   
   // assigns a signer to our umi instance, and loads the MPL metadata program and Irys uploader plugins.
   umi.use(keypairIdentity(umiKeypair));
+
+  const assetImagePath = "asset.png";
+
+const buffer = await fs.readFile(assetImagePath);
+let file = createGenericFile(buffer, assetImagePath, {
+  contentType: "image/png",
+});
+
+// upload image and get image uri
+const [image] = await umi.uploader.upload([file]);
+console.log("image uri:", image);
+
+const metadata = {
+  name: "My Asset",
+  description: "My Asset Description",
+  image,
+  external_url: "https://example.com",
+  attributes: [
+    {
+      trait_type: "trait1",
+      value: "value1",
+    },
+    {
+      trait_type: "trait2",
+      value: "value2",
+    },
+  ],
+  properties: {
+    files: [
+      {
+        uri: image,
+        type: "image/jpeg",
+      },
+    ],
+    category: "image",
+  },
+};
+
+// upload offchain json using irys and get metadata uri
+const uri = await umi.uploader.uploadJson(metadata);
+console.log("Asset offchain metadata URI:", uri);
